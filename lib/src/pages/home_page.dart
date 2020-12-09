@@ -1,3 +1,4 @@
+import 'package:films/src/providers/films_provider.dart';
 import 'package:films/src/widgets/card_swiper_widget_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +24,20 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _cardWidgetProvider() {
-    return CardSwiperWidgetProvider(films: [
-      1,2,3,4,5
-    ]);
+    final provider = new FilmsProvider();
+
+    return FutureBuilder(
+      future: provider.getNowPlaying(),
+      builder: (BuildContext constext, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          return CardSwiperWidgetProvider(films: snapshot.data);
+        } else {
+          return Container(
+            height: 400,
+              child: Center(child: CircularProgressIndicator())
+          );
+        }
+      },
+    );
   }
 }

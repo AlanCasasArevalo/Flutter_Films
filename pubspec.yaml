@@ -29,6 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.0
 # Flutter swiper to get custom cards https://pub.dev/packages/flutter_swiper
   flutter_swiper: ^1.1.6
+  http: ^0.12.2
 
 dev_dependencies:
   flutter_test:

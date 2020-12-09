@@ -6,7 +6,6 @@ class Films {
   Films.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-
       final film = new Film.fromJson(item);
       films.add(film);
     }
@@ -61,5 +60,15 @@ class Film {
     video = json["video"];
     voteAverage = json["vote_average"] / 1;
     voteCount = json["vote_count"];
+  }
+
+  getPosterImage() {
+    if (posterPath != null) {
+      return 'https://image.tmdb.org/t/p/w500/$posterPath';
+    } else if (backdropPath != null) {
+      return 'https://image.tmdb.org/t/p/w500/$backdropPath';
+    } else {
+      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png';
+    }
   }
 }

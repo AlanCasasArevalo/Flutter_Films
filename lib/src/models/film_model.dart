@@ -71,4 +71,14 @@ class Film {
       return 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png';
     }
   }
+
+  getBackdropPathImage() {
+    if (posterPath != null) {
+      return 'https://image.tmdb.org/t/p/w500/$backdropPath';
+    } else if (backdropPath != null) {
+      return 'https://image.tmdb.org/t/p/w500/$posterPath';
+    } else {
+      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png';
+    }
+  }
 }

@@ -10,7 +10,31 @@ class FilmDetailPage extends StatelessWidget {
 
     return Scaffold(
       body: Center(
-        child: Text('Hola'),
+        child: CustomScrollView(
+          slivers: [
+            _appBarBuilder(film),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SliverAppBar _appBarBuilder (Film film) {
+    return SliverAppBar(
+      elevation: 30,
+      backgroundColor: Colors.indigoAccent,
+      expandedHeight: 200,
+      floating: false,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text(film.title, style: TextStyle(color: Colors.white, fontSize: 16),),
+        background: FadeInImage(
+          image: NetworkImage(film.getBackdropPathImage()),
+          placeholder: AssetImage('assets/loading.gif'),
+          fadeInDuration: Duration(milliseconds: 150),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

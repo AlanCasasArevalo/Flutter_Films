@@ -5,11 +5,12 @@ import 'package:films/src/models/film_model.dart';
 import 'package:http/http.dart' as http;
 
 class FilmsProvider {
-  String _apiKey = 'YOUR_API_KEY';
+  String _apiKey = 'eb3289f4bb07a4659a97025942a3c2b7';
   String _url = 'api.themoviedb.org';
   String _language = 'es-ES';
 
-  int _popularPage = 1;
+  int _popularPage = 0;
+  bool _isLoading = false;
 
   // Stream parte de React
   List<Film> _populars = new List();
@@ -43,7 +44,10 @@ class FilmsProvider {
   }
 
   Future<List<Film>> getPopular() async {
-    _popularPage++;
+
+    if(_isLoading) return [];
+    _isLoading = true;
+
     final uri = Uri.https(_url, '3/movie/popular', {
       'api_key': _apiKey,
       'language': _language,
@@ -56,6 +60,9 @@ class FilmsProvider {
     _populars.addAll(response);
     popularsSink(_populars);
 
+    _isLoading = false;
+    _popularPage++;
+    
     return response;
   }
 }

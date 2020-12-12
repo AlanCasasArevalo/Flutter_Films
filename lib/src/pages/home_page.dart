@@ -9,6 +9,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    provider.getPopular();
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,

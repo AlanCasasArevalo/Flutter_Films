@@ -23,40 +23,41 @@ class HorizontalMovie extends StatelessWidget {
 
     return Container(
       height: _screenSize.height * 0.20,
-      child: PageView(
+      child: PageView.builder(
+        itemCount: films.length,
         pageSnapping: false,
         controller: _pageController,
-        children: _cards(context),
+        itemBuilder: (context, index) {
+          return _cardBuilder(context, films[index]);
+        },
       ),
     );
   }
 
-  List<Widget> _cards(BuildContext context) {
-    return films.map((film) {
-      return Container(
-        margin: EdgeInsets.only(right: 15),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: FadeInImage(
-                placeholder: AssetImage('assets/no-image.jpg'),
-                image: NetworkImage(film.getPosterImage()),
-                fit: BoxFit.cover,
-                height: 150,
-              ),
+  Widget _cardBuilder (BuildContext context, Film film) {
+    return Container(
+      margin: EdgeInsets.only(right: 15),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: FadeInImage(
+              placeholder: AssetImage('assets/no-image.jpg'),
+              image: NetworkImage(film.getPosterImage()),
+              fit: BoxFit.cover,
+              height: 150,
             ),
-            SizedBox(
-              height: 5.0,
-            ),
-            Text(
-              film.title,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.caption,
-            )
-          ],
-        ),
-      );
-    }).toList();
+          ),
+          SizedBox(
+            height: 5.0,
+          ),
+          Text(
+            film.title,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.caption,
+          )
+        ],
+      ),
+    );
   }
 }

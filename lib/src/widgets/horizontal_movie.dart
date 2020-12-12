@@ -27,9 +27,7 @@ class HorizontalMovie extends StatelessWidget {
         itemCount: films.length,
         pageSnapping: false,
         controller: _pageController,
-        itemBuilder: (context, index) {
-          return _cardBuilder(context, films[index]);
-        },
+        itemBuilder: (context, index) => _cardBuilder(context, films[index])
       ),
     );
   }

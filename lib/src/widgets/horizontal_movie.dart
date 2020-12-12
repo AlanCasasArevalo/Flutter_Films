@@ -36,7 +36,7 @@ class HorizontalMovie extends StatelessWidget {
                 placeholder: AssetImage('assets/no-image.jpg'),
                 image: NetworkImage(film.getPosterImage()),
                 fit: BoxFit.cover,
-                height: 100,
+                height: 150,
               ),
             ),
             SizedBox(height: 5.0,),

@@ -5,20 +5,27 @@ import 'package:flutter/rendering.dart';
 class HorizontalMovie extends StatelessWidget {
   final List<Film> films;
 
-  HorizontalMovie({@required this.films});
+  final Function nextPage;
+
+  HorizontalMovie({@required this.films, @required this.nextPage});
+
+  final _pageController = PageController(initialPage: 1, viewportFraction: 0.3);
 
   @override
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
 
+    _pageController.addListener(() {
+      if(_pageController.position.pixels >= _pageController.position.maxScrollExtent - 175) {
+        nextPage();
+      }
+    });
+
     return Container(
       height: _screenSize.height * 0.20,
       child: PageView(
         pageSnapping: false,
-        controller: PageController(
-          initialPage: 1,
-          viewportFraction: 0.3
-        ),
+        controller: _pageController,
         children: _cards(context),
       ),
     );
@@ -39,9 +46,11 @@ class HorizontalMovie extends StatelessWidget {
                 height: 150,
               ),
             ),
-            SizedBox(height: 5.0,),
+            SizedBox(
+              height: 5.0,
+            ),
             Text(
-                film.title,
+              film.title,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.caption,
             )

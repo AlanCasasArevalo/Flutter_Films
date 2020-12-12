@@ -9,7 +9,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     provider.getPopular();
 
     return Scaffold(
@@ -67,7 +66,10 @@ class HomePage extends StatelessWidget {
               stream: provider.popularsStream,
               builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                 if (snapshot.hasData) {
-                  return HorizontalMovie(films: snapshot.data, nextPage: provider.getPopular,);
+                  return HorizontalMovie(
+                    films: snapshot.data,
+                    nextPage: provider.getPopular,
+                  );
                 } else {
                   return Center(child: CircularProgressIndicator());
                 }

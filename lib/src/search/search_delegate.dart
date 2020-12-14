@@ -1,7 +1,8 @@
+import 'package:films/src/models/film_model.dart';
+import 'package:films/src/providers/films_provider.dart';
 import 'package:flutter/material.dart';
 
 class DataSearch extends SearchDelegate {
-
   String selected = '';
 
   final films = [
@@ -47,35 +48,50 @@ class DataSearch extends SearchDelegate {
     // Crea los resultados a mostrar
     return Center(
         child: Container(
-          height: 100,
-          width: 100,
-          color: Colors.amberAccent,
-          child: Text(selected),
-        )
-    );
+      height: 100,
+      width: 100,
+      color: Colors.amberAccent,
+      child: Text(selected),
+    ));
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     // Crea las sugerencias cuando la persona escribe
+    final provider = FilmsProvider();
 
-    final suggestionList = (query.isEmpty) ? recentFilms : films.where(
-            // Se puede usar el contiene o bien el startsWith
-            // (element) => element.toLowerCase().startsWith(query.toLowerCase())
-            (element) => element.toLowerCase().contains(query.toLowerCase())
-    ).toList();
-
-    return ListView.builder(
-        itemCount: suggestionList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Icon(Icons.movie),
-            title: Text(suggestionList[index]),
-            onTap: () {
-              selected = suggestionList[index];
-              showResults(context);
-            },
-          );
-        });
+    if (query.isEmpty) {
+      return Container();
+    } else {
+      return FutureBuilder(
+        future: provider.getSearchFilm(query),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            final List<Film> films = snapshot.data;
+            return ListView(
+              children: films.map((film) {
+                return ListTile(
+                  leading: FadeInImage(
+                    image: NetworkImage(film.getPosterImage()),
+                    placeholder: AssetImage('assets/no-image.jpg'),
+                    width: 50,
+                    fit: BoxFit.contain,
+                  ),
+                  title: Text(film?.title),
+                  subtitle: Text('Votación ${film?.voteAverage}'),
+                  onTap: () {
+                    close(context, null);
+                    film.uniqueId = '${film.id}-film-searched';
+                    Navigator.pushNamed(context, 'film_detail', arguments: film);
+                  },
+                );
+              }).toList(),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      );
+    }
   }
 }

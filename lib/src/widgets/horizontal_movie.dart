@@ -39,7 +39,7 @@ class HorizontalMovie extends StatelessWidget {
       child: Column(
         children: [
           Hero(
-            tag: film.id,
+            tag: film.uniqueId,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: FadeInImage(

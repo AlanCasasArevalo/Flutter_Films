@@ -48,6 +48,7 @@ class FilmsProvider {
   Future<List<Film>> getPopular() async {
     if (_isLoading) return [];
     _isLoading = true;
+    _popularPage++;
 
     final uri = Uri.https(_url, '3/movie/popular', {
       'api_key': _apiKey,
@@ -62,7 +63,6 @@ class FilmsProvider {
     popularsSink(_populars);
 
     _isLoading = false;
-    _popularPage++;
 
     return response;
   }
@@ -75,5 +75,15 @@ class FilmsProvider {
     final decodedData = json.decode(response.body);
     final casts = new Cast.fromJsonList(decodedData['cast']);
     return casts.casts;
+  }
+
+  Future<List<Film>> getSearchFilm(String query) async {
+    final uri = Uri.https(_url, '3/search/movie', {
+      'api_key': _apiKey,
+      'language': _language,
+      'query': query,
+    });
+
+    return await _responseProcess(uri);
   }
 }

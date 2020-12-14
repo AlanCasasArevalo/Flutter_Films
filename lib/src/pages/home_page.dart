@@ -1,10 +1,10 @@
 import 'package:films/src/providers/films_provider.dart';
+import 'package:films/src/search/search_delegate.dart';
 import 'package:films/src/widgets/card_swiper_widget_provider.dart';
 import 'package:films/src/widgets/horizontal_movie.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-
   final provider = new FilmsProvider();
 
   @override
@@ -16,7 +16,17 @@ class HomePage extends StatelessWidget {
           centerTitle: false,
           title: Text('En Cartelera'),
           backgroundColor: Colors.indigoAccent,
-          actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})],
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: DataSearch(),
+                    // query: 'Hola'
+                  );
+                })
+          ],
         ),
         body: Container(
           child: SafeArea(

@@ -68,30 +68,34 @@ class DataSearch extends SearchDelegate {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final List<Film> films = snapshot.data;
-            return ListView(
-              children: films.map((film) {
-                return ListTile(
-                  leading: FadeInImage(
-                    image: NetworkImage(film.getPosterImage()),
-                    placeholder: AssetImage('assets/no-image.jpg'),
-                    width: 50,
-                    fit: BoxFit.contain,
-                  ),
-                  title: Text(film?.title),
-                  subtitle: Text('Votación ${film?.voteAverage}'),
-                  onTap: () {
-                    close(context, null);
-                    film.uniqueId = '${film.id}-film-searched';
-                    Navigator.pushNamed(context, 'film_detail', arguments: film);
-                  },
-                );
-              }).toList(),
-            );
+            return _listViewResultBuilder(context, films);
           } else {
             return Center(child: CircularProgressIndicator());
           }
         },
       );
     }
+  }
+
+  ListView _listViewResultBuilder(BuildContext context, List<Film> films) {
+    return ListView(
+      children: films.map((film) {
+        return ListTile(
+          leading: FadeInImage(
+            image: NetworkImage(film.getPosterImage()),
+            placeholder: AssetImage('assets/no-image.jpg'),
+            width: 50,
+            fit: BoxFit.contain,
+          ),
+          title: Text(film?.title),
+          subtitle: Text('Votación ${film?.voteAverage}'),
+          onTap: () {
+            close(context, null);
+            film.uniqueId = '${film.id}-film-searched';
+            Navigator.pushNamed(context, 'film_detail', arguments: film);
+          },
+        );
+      }).toList(),
+    );
   }
 }

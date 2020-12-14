@@ -86,4 +86,16 @@ class FilmsProvider {
 
     return await _responseProcess(uri);
   }
+
+  //https://api.themoviedb.org/3/movie/top_rated?api_key=eb3289f4bb07a4659a97025942a3c2b7&language=en-US&page=1
+  Future<List<Film>> getTopRated() async {
+    final uri = Uri.https(_url, '3/top_rated', {
+      'api_key': _apiKey,
+      'language': _language
+    });
+
+    return await _responseProcess(uri);
+  }
+
+
 }

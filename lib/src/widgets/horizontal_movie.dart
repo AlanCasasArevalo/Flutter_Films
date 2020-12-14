@@ -33,6 +33,7 @@ class HorizontalMovie extends StatelessWidget {
   }
 
   Widget _cardBuilder (BuildContext context, Film film) {
+    film.uniqueId = '${film.id}-cast-card';
     final card = Container(
       margin: EdgeInsets.only(right: 15),
       child: Column(

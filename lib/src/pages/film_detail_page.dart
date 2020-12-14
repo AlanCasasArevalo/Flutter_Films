@@ -1,3 +1,4 @@
+import 'package:films/src/models/actor_model.dart';
 import 'package:films/src/models/film_model.dart';
 import 'package:films/src/providers/films_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class FilmDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Film film = ModalRoute.of(context).settings.arguments;
 
-    provider.getActors(film.id.toString());
+    provider.getActors(film.id);
 
     return Scaffold(
       body: Center(
@@ -21,9 +22,74 @@ class FilmDetailPage extends StatelessWidget {
               SizedBox(height: 10),
               _titlePoster(context, film),
               _descriptionFilm(film),
+              _castingBuilder(film)
             ]))
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _castingBuilder(Film film) {
+    final provider = new FilmsProvider();
+
+    provider.getActors(film.id);
+
+    return FutureBuilder(
+      future: provider.getActors(film.id),
+      builder: (context, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          return _actorsPageViewBuilder(snapshot.data);
+        } else {
+          return Container(
+              height: 400, child: Center(child: CircularProgressIndicator()));
+        }
+      },
+    );
+  }
+
+  Widget _actorsPageViewBuilder(List<Actor> actors) {
+    return SizedBox(
+      height: 200,
+      child: PageView.builder(
+          pageSnapping: false,
+          itemCount: actors.length,
+          controller: PageController(viewportFraction: 0.3, initialPage: 1),
+          itemBuilder: (context, index) {
+            return _actorCardBuilder(actors[index]);
+          }),
+    );
+  }
+
+  Widget _actorCardBuilder(Actor actor) {
+    return Container(
+      padding: EdgeInsets.only(top: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: FadeInImage(
+                placeholder: AssetImage('assets/no-image.jpg'),
+                image: NetworkImage(actor.getPosterImage()),
+              height: 150,
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Text(
+            actor.name,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 16,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold
+            )
+          )
+        ],
       ),
     );
   }

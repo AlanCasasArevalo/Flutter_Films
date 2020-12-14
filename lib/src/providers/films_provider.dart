@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:films/src/models/actor_model.dart';
 import 'package:films/src/models/film_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +15,7 @@ class FilmsProvider {
 
   // Stream parte de React
   List<Film> _populars = new List();
+  List<Actor> _actors = new List();
 
   // Si no pones el broadcast NO SE PODRA ESCUCHAR POR OTROS WIDGETS
   final _popularsStreamController = StreamController<List<Film>>.broadcast();
@@ -44,8 +46,7 @@ class FilmsProvider {
   }
 
   Future<List<Film>> getPopular() async {
-
-    if(_isLoading) return [];
+    if (_isLoading) return [];
     _isLoading = true;
 
     final uri = Uri.https(_url, '3/movie/popular', {
@@ -62,7 +63,17 @@ class FilmsProvider {
 
     _isLoading = false;
     _popularPage++;
-    
+
     return response;
+  }
+
+  Future<List<Actor>> getActors(String filmId) async {
+    final uri = Uri.https(_url, '3/movie/$filmId/credits',
+        {'api_key': _apiKey, 'language': _language});
+
+    final response = await http.get(uri);
+    final decodedData = json.decode(response.body);
+    final casts = new Cast.fromJsonList(decodedData['cast']);
+    return casts.casts;
   }
 }

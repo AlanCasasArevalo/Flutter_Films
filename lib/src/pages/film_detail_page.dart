@@ -1,10 +1,15 @@
 import 'package:films/src/models/film_model.dart';
+import 'package:films/src/providers/films_provider.dart';
 import 'package:flutter/material.dart';
 
 class FilmDetailPage extends StatelessWidget {
+  final provider = new FilmsProvider();
+
   @override
   Widget build(BuildContext context) {
     final Film film = ModalRoute.of(context).settings.arguments;
+
+    provider.getActors(film.id.toString());
 
     return Scaffold(
       body: Center(
@@ -97,6 +102,4 @@ class FilmDetailPage extends StatelessWidget {
       ),
     );
   }
-
-
 }
